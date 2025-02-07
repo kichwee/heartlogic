@@ -1,0 +1,83 @@
+/* Reset default styles */
+body, ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+body {
+    background: linear-gradient(135deg, #8F788D, #D180AC);
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Navbar Styling */
+.navbar {
+    background: rgba(255, 255, 255, 0.2); /* Glass effect */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.3);
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    max-width: 900px;
+}
+
+/* Navbar List Items */
+.navbar li {
+    margin: 0 20px;
+}
+
+/* Navbar Links */
+.navbar a {
+    text-decoration: none;
+    color: white;
+    padding: 12px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    display: inline-block;
+    position: relative;
+}
+
+/* Hover Effect - Glow & 3D */
+.navbar a:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.6);
+    transform: scale(1.1);
+}
+
+/* Active Page Indicator */
+.navbar .active {
+    font-weight: bold;
+    border-bottom: 3px solid white;
+}
+
+/* 3D Press Effect */
+.navbar a:active {
+    transform: scale(0.9);
+}
+
+/* Media Queries for Mobile */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        width: 90%;
+        padding: 10px;
+    }
+
+    .navbar li {
+        margin: 10px 0;
+    }
+}
