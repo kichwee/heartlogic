@@ -9,18 +9,18 @@
 }
 
 :root{
-    --primary-color: #131314;
-    --secondary-color: #1E1F20;
-    --secondary-hover-color: #333537;
+    --primary-color: #631469;
+    --secondary-color: #5c0954;
+    --secondary-hover-color: #450c5e;
   
-    --focus-color: #282A2C;
-    --focus-hover-color: #37393B;
+    --focus-color: #640769;
+    --focus-hover-color: #971dde;
   
-    --button-hover-color: #2f3030;
+    --button-hover-color: #5f0b51;
   
     --text-color: #fff;
     --text-secondary-color: #D8D8D8;
-    --heading-secondary-color: #444746;
+    --heading-secondary-color: #811bcf;
     --placeholder-color: #ABAFB3;
 }
 
