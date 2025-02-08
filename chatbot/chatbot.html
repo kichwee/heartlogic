@@ -6,175 +6,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
     <title>Day #78 - Google Gemini Clone | AsmrProg</title>
-    <style>
-        /* Global Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #8F788D, #D180AC);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
-        }
-
-        /* Navigation Bar */
-        .navbar {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 25px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(209, 128, 172, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar__logo {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 2px 4px rgba(209, 128, 172, 0.5);
-        }
-
-        .navbar__button {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            font-size: 1.5em;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        .navbar__button:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
-        }
-
-        /* Header Section */
-        .header {
-            text-align: center;
-            width: 100%;
-        }
-
-        .header__title h1 {
-            font-size: 2.8em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(209, 128, 172, 0.5);
-        }
-
-        .header__title h2 {
-            font-size: 1.6em;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 500;
-        }
-
-        /* Chat Section */
-        .chats {
-            width: 100%;
-            max-width: 1200px;
-            height: 400px;
-            overflow-y: auto;
-            padding: 20px;
-            background: rgba(209, 128, 172, 0.8);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(209, 128, 172, 0.5);
-        }
-
-        /* Prompt Section */
-        .prompt {
-            width: 100%;
-            max-width: 1200px;
-        }
-
-        .prompt__input-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(209, 128, 172, 0.8);
-            padding: 15px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(209, 128, 172, 0.5);
-        }
-
-        .prompt__form-input {
-            flex-grow: 1;
-            padding: 12px;
-            border: none;
-            background: rgba(143, 120, 141, 0.9);
-            color: white;
-            font-size: 16px;
-            border-radius: 10px;
-        }
-
-        .prompt__form-button {
-            background: rgba(209, 128, 172, 0.8);
-            border: none;
-            color: white;
-            font-size: 1.5em;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .prompt__form-button:hover {
-            background: rgba(143, 120, 141, 0.9);
-            transform: scale(1.05);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .suggests {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </head>
 
 <body>
+
     <nav class="navbar">
-        <a href="../index.html"><h3 class="navbar__logo">Home</h3></a>
+        <h3 class="navbar__logo">AsmrProg Gemini</h3>
         <button class="navbar__button" id="themeToggler"><i class='bx bx-sun'></i></button>
-        
     </nav>
 
     <header class="header">
-        <ul class="navbar">
-            <li></li>
-            
-        </ul>
-
         <div class="header__title">
             <h1>Hello, There!</h1>
             <h2>How can I help you today?</h2>
         </div>
-
+        <div class="suggests">
+            <div class="suggests__item">
+                <p class="suggests__item-text">
+                    Give tips on helping kids finish their homework on time
+                </p>
+                <div class="suggests__item-icon">
+                    <i class='bx bx-stopwatch'></i>
+                </div>
+            </div>
+            <div class="suggests__item">
+                <p class="suggests__item-text">
+                    Help me write an out-of-office email
+                </p>
+                <div class="suggests__item-icon">
+                    <i class='bx bx-edit-alt'></i>
+                </div>
+            </div>
+            <div class="suggests__item">
+                <p class="suggests__item-text">
+                    Give me phrases to learn a new language
+                </p>
+                <div class="suggests__item-icon">
+                    <i class='bx bx-compass'></i>
+                </div>
+            </div>
+            <div class="suggests__item">
+                <p class="suggests__item-text">
+                    Show me how to build something by hand
+                </p>
+                <div class="suggests__item-icon">
+                    <i class='bx bx-wrench'></i>
+                </div>
+            </div>
+        </div>
     </header>
 
     <section class="chats"></section>
@@ -191,10 +72,16 @@
                 </button>
             </div>
         </form>
+        <p class="prompt__disclaim">
+            Gemini may display inaccurate info, including about people, so double-check its responses.
+        </p>
     </section>
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>
