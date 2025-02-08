@@ -1,22 +1,72 @@
 const songsList = [
     {
-        name: "Jazz In Paris",
-        artist: "Media Right Productions",
+        name: "Ocean Eyes",
+        artist: "Billie Eilish",
         src: "assets/Billie Eilish - Ocean Eyes (Official Music Video).mp3",
         cover: "assets/1.jpg"
     },
     {
-        name: "Blue Skies",
-        artist: "Silent Partner",
-        src: "assets/2.mp3",
-        cover: "assets/2.jpg"
+        name: "Inauma",
+        artist: "Bien",
+        src: "assets/Bien - Inauma (Official Music Video).mp3",
+        cover: "assets/1.jpg"
     },
     {
-        name: "Crimson Fly",
-        artist: "Huma-Huma",
-        src: "assets/3.mp3",
-        cover: "assets/3.jpg"
+        name: "When the party's over",
+        artist: "Billie Eilish",
+        src: "assets/Billie Eilish - when the party's over (Official Music Video).mp3",
+        cover: "assets/1.jpg"
+    },
+    {
+        name: "Chord Overstreet",
+        artist: "Alvin",
+        src: "assets/Chord Overstreet - Hold On (Lyric Video).mp3",
+        cover: "assets/1.jpg"
+    },
+    {
+        name: "Imposible",
+        artist: "James Arthur",
+        src: "assets/James Arthur - Impossible (Official Video).mp3",
+        cover: "assets/1.jpg"
+    },
+    {
+        name: "Say you wont let go",
+        artist: "James Arthur",
+        src: "assets/James Arthur - Say You Won't Let Go.mp3",
+        cover: "assets/1.jpg"
+    },
+    {
+        name: "Train Wreck",
+        artist: "James Arthur",
+        src: "assets/James Arthur - Train Wreck (Lyrics).mp3",
+        cover: "assets/1.jpg"
+    },
+    {
+        name: "Colorado",
+        artist: "Milky Chance",
+        src: "assets/Milky Chance - Colorado (Official Video).mp3",
+        cover: "assets/1.jpg"
+    },
+    {
+        name: "American",
+        artist: "Qing Madi",
+        src: "assets/Qing Madi - American Love (Lyrics).mp3",
+        cover: "assets/1.jpg"
+    },
+    {
+        name: "BNXN",
+        artist: "Qing Madi",
+        src: "assets/Qing Madi, BNXN - Ole (Lyrics).mp3",
+        cover: "assets/1.jpg"
+    },
+    {
+        name: "Dandelions",
+        artist: "Qing Madi",
+        src: "assets/Ruth B. - Dandelions (Lyrics).mp3",
+        cover: "assets/1.jpg"
     }
+
+   
 ];
 
 const artistName = document.querySelector('.artist-name');
@@ -28,6 +78,7 @@ const playBtn = document.getElementById('play');
 const prevBtn = document.getElementById('prev');
 const nextBtn = document.getElementById('next');
 const prog = document.querySelector('.progress-bar');
+const musicTilesContainer = document.querySelector('.music-tiles');
 
 let song = new Audio();
 let currentSong = 0;
@@ -35,6 +86,7 @@ let playing = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     loadSong(currentSong);
+    displayMusicTiles();
     song.addEventListener('timeupdate', updateProgress);
     song.addEventListener('ended', nextSong);
     prevBtn.addEventListener('click', prevSong);
@@ -59,7 +111,6 @@ function updateProgress() {
         const duration = formatTime(song.duration);
         const currentTime = formatTime(song.currentTime);
         time.innerText = `${currentTime} - ${duration}`;
-
     }
 }
 
@@ -103,4 +154,23 @@ function playMusic() {
 function seek(e) {
     const pos = (e.offsetX / prog.clientWidth) * song.duration;
     song.currentTime = pos;
+}
+
+// Display music tiles
+function displayMusicTiles() {
+    musicTilesContainer.innerHTML = "";
+    songsList.forEach((song, index) => {
+        const tile = document.createElement('div');
+        tile.classList.add('music-tile');
+        tile.innerHTML = `
+            <img src="${song.cover}" alt="${song.name}">
+            <p>${song.name}</p>
+            <p>${song.artist}</p>
+        `;
+        tile.addEventListener('click', () => {
+            currentSong = index;
+            playMusic();
+        });
+        musicTilesContainer.appendChild(tile);
+    });
 }
