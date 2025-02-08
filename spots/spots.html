@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kenya Dating Spots & Events</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #ff4b6e;
+            margin: 40px 0 20px;
+            font-size: 24px;
+        }
+
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .filter-section {
+            margin-bottom: 15px;
+        }
+
+        .filter-section h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 8px 15px;
+            border: 1px solid #ff4b6e;
+            border-radius: 20px;
+            background: white;
+            color: #ff4b6e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: #ff4b6e;
+            color: white;
+        }
+
+        .filter-btn:hover {
+            background: #ff4b6e20;
+        }
+
+        .price-range {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price-input {
+            width: 100px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .spots-grid, .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .spot-card, .event-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .spot-card:hover, .event-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .spot-image, .event-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .spot-info, .event-info {
+            padding: 15px;
+        }
+
+        .spot-name, .event-name {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .spot-description, .event-description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .price-details {
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .price-label {
+            color: #666;
+        }
+
+        .price-value {
+            color: #ff4b6e;
+            font-weight: bold;
+        }
+
+        .date-badge {
+            background: #ff4b6e;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 768px) {
+            .spots-grid, .events-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .price-range {
+                flex-wrap: wrap;
+            }
+
+            .price-input {
+                width: calc(50% - 5px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Romantic Spots & Events in Kenya</h1>
+
+        <div class="filters">
+            <div class="filter-section">
+                <h3>Activity Type</h3>
+                <div class="filter-options">
+                    <button class="filter-btn active" data-type="all">All</button>
+                    <button class="filter-btn" data-type="outdoor">Outdoor</button>
+                    <button class="filter-btn" data-type="dining">Dining</button>
+                    <button class="filter-btn" data-type="adventure">Adventure</button>
+                    <button class="filter-btn" data-type="cultural">Cultural</button>
+                </div>
+            </div>
+            <div class="filter-section">
+                <h3>Price Range (KSh)</h3>
+                <div class="price-range">
+                    <input type="number" class="price-input" id="min-price" placeholder="Min" min="0">
+                    <span>to</span>
+                    <input type="number" class="price-input" id="max-price" placeholder="Max" min="0">
+                    <button class="filter-btn" onclick="applyPriceFilter()">Apply</button>
+                </div>
+            </div>
+        </div>
+        <h2 class="section-title">Popular Dating Spots</h2>
+        <div class="spots-grid">
+            <div class="spot-card" data-type="outdoor" data-price="0">
+                <img src="https://images.unsplash.com/photo-1516426122078-c23e76319801" alt="Diani Beach" class="spot-image">
+                <div class="spot-info">
+                    <h3 class="spot-name">Diani Beach</h3>
+                    <p class="spot-description">Beautiful white sandy beach perfect for romantic walks and sunset views.</p>
+                    <div class="price-details">
+                        <div class="price-item">
+                            <span class="price-label">Beach Access</span>
+                            <span class="price-value">Free</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-label">Beach Activities</span>
+                            <span class="price-value">KSh 1,000 - 3,000</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-label">Beachfront Dinner</span>
+                            <span class="price-value">KSh 3,000 - 5,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spot-card" data-type="adventure" data-price="430">
+                <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e" alt="Nairobi National Park" class="spot-image">
+                <div class="spot-info">
+                    <h3 class="spot-name">Nairobi National Park</h3>
+                    <p class="spot-description">Safari experience with city skyline views. Perfect for adventure lovers.</p>
+                    <div class="price-details">
+                        <div class="price-item">
+                            <span class="price-label">Citizens Entry</span>
+                            <span class="price-value">KSh 430</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-label">Residents Entry</span>
+                            <span class="price-value">KSh 1,030</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-label">Vehicle Fee</span>
+                            <span class="price-value">KSh 300</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spot-card" data-type="outdoor" data-price="200">
+                <img src="https://images.unsplash.com/photo-1565361849-4b1cc9e68846" alt="Karura Forest" class="spot-image">
+                <div class="spot-info">
+                    <h3 class="spot-name">Karura Forest</h3>
+                    <p class="spot-description">Peaceful nature trails and waterfalls for a serene date experience.</p>
+                    <div class="price-details">
+                        <div class="price-item">
+                            <span class="price-label">Citizens Entry</span>
+                            <span class="price-value">KSh 200</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-label">Residents Entry</span>
+                            <span class="price-value">KSh 600</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-label">Bike Rental</span>
+                            <span class="price-value">KSh 500/hour</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Upcoming Events</h2>
+        <div class="events-grid">
+            <div class="event-card" data-type="dining" data-price="3500">
+                <img src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17" alt="Sunset Dinner" class="event-image">
+                <div class="event-info">
+                    <span class="date-badge">15 FEB, 6:00 PM</span>
+                    <h3 class="event-name">Sunset Dinner at Carnivore</h3>
+                    <p class="event-description">Enjoy a romantic dinner with live entertainment at the famous Carnivore Restaurant.</p>
+                    <div class="price-details">
+                        <div class="price-item">
+                            <span class="price-label">Per Person</span>
+                            <span class="price-value">KSh 3,500</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-label">Couple Package</span>
+                            <span class="price-value">KSh 6,500</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-label">With Wine Pairing</span>
+                            <span class="price-value">+KSh 2,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="event-card" data-type="cultural" data-price="4000">
+                <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3" alt="Wine Tasting" class="event-image">
+                <div class="event-info">
+                    <span class="date-badge">20 FEB, 5:00 PM</span>
+                    <h3 class="event-name">Wine Tasting Evening</h3>
+                    <p class="event-description">Sample premium wines paired with gourmet cheese at Hemingways Nairobi.</p>
+                    <div class="price-details">
+                        <div class="price-item">
+                            <span class="price-label">Per Person</span>
+                            <span class="price-value">KSh 4,000</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-label">Couple Package</span>
+                            <span class="price-value">KSh 7,500</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-label">VIP Experience</span>
+                            <span class="price-value">KSh 12,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="event-card" data-type="cultural" data-price="5000">
+                <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d" alt="Cooking Class" class="event-image">
+                <div class="event-info">
+                    <span class="date-badge">25 FEB, 2:00 PM</span>
+                    <h3 class="event-name">Couples Cooking Class</h3>
+                    <p class="event-description">Learn to prepare a gourmet three-course meal together at Cookery Place.</p>
+                    <div class="price-details">
+                        <div class="price-item">
+                            <span class="price-label">Per Couple</span>
+                            <span class="price-value">KSh 5,000</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-label">With Wine</span>
+                            <span class="price-value">KSh 6,500</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-label">Premium Package</span>
+                            <span class="price-value">KSh 8,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const filterButtons = document.querySelectorAll('.filter-btn[data-type]');
+        const cards = document.querySelectorAll('.spot-card, .event-card');
+        let currentType = 'all';
+        let currentMinPrice = 0;
+        let currentMaxPrice = Infinity;
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                currentType = button.dataset.type;
+                applyFilters();
+            });
+        });
+
+        function applyPriceFilter() {
+            const minPrice = document.getElementById('min-price').value;
+            const maxPrice = document.getElementById('max-price').value;
+            
+            currentMinPrice = minPrice ? parseInt(minPrice) : 0;
+            currentMaxPrice = maxPrice ? parseInt(maxPrice) : Infinity;
+            
+            applyFilters();
+        }
+
+        function applyFilters() {
+            let visibleCards = 0;
+
+            cards.forEach(card => {
+                const type = card.dataset.type;
+                const price = parseInt(card.dataset.price);
+                
+                const typeMatch = currentType === 'all' || type === currentType;
+                const priceMatch = price >= currentMinPrice && price <= currentMaxPrice;
+
+                if (typeMatch && priceMatch) {
+                    card.classList.remove('hidden');
+                    visibleCards++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            const spotsGrid = document.querySelector('.spots-grid');
+            const eventsGrid = document.querySelector('.events-grid');
+            
+            document.querySelectorAll('.no-results').forEach(msg => msg.remove());
+
+            if (visibleCards === 0) {
+                const noResults = document.createElement('div');
+                noResults.className = 'no-results';
+                noResults.textContent = 'No results found for the selected filters.';
+                spotsGrid.appendChild(noResults.cloneNode(true));
+                eventsGrid.appendChild(noResults.cloneNode(true));
+            }
+        }
+
+        applyFilters();
+    </script>
+</body>
+</html>
