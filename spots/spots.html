@@ -26,12 +26,16 @@
             color: #333;
             text-align: center;
             margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
         .section-title {
             color: #ff4b6e;
             margin: 40px 0 20px;
             font-size: 24px;
+            border-bottom: 2px solid #ff4b6e;
+            padding-bottom: 10px;
         }
 
         .filters {
@@ -75,73 +79,91 @@
 
         .filter-btn:hover {
             background: #ff4b6e20;
+            transform: translateY(-2px);
         }
 
         .price-range {
             display: flex;
             align-items: center;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .price-input {
-            width: 100px;
+            width: 120px;
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 5px;
+            transition: border-color 0.3s ease;
+        }
+
+        .price-input:focus {
+            border-color: #ff4b6e;
+            outline: none;
         }
 
         .spots-grid, .events-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
             margin-bottom: 40px;
         }
 
         .spot-card, .event-card {
             background: white;
-            border-radius: 10px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
         }
 
         .spot-card:hover, .event-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         .spot-image, .event-image {
             width: 100%;
             height: 200px;
             object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .spot-card:hover .spot-image, 
+        .event-card:hover .event-image {
+            transform: scale(1.05);
         }
 
         .spot-info, .event-info {
-            padding: 15px;
+            padding: 20px;
         }
 
         .spot-name, .event-name {
-            font-size: 18px;
+            font-size: 20px;
             color: #333;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
 
         .spot-description, .event-description {
             color: #666;
             font-size: 14px;
-            margin-bottom: 8px;
+            margin-bottom: 15px;
+            line-height: 1.5;
         }
 
         .price-details {
             background: #f8f8f8;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
         }
 
         .price-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-size: 14px;
         }
 
@@ -157,10 +179,24 @@
         .date-badge {
             background: #ff4b6e;
             color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
+            padding: 6px 12px;
+            border-radius: 20px;
             display: inline-block;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .category-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,75,110,0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
         }
 
         .hidden {
@@ -169,9 +205,12 @@
 
         .no-results {
             text-align: center;
-            padding: 20px;
+            padding: 30px;
             color: #666;
             grid-column: 1 / -1;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         @media (max-width: 768px) {
@@ -180,18 +219,27 @@
             }
 
             .price-range {
-                flex-wrap: wrap;
+                flex-direction: column;
+                align-items: stretch;
             }
 
             .price-input {
-                width: calc(50% - 5px);
+                width: 100%;
+            }
+
+            .filter-options {
+                flex-direction: column;
+            }
+
+            .filter-btn {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Romantic Spots & Events in Kenya</h1>
 
         <div class="filters">
             <div class="filter-section">
@@ -201,7 +249,9 @@
                     <button class="filter-btn" data-type="outdoor">Outdoor</button>
                     <button class="filter-btn" data-type="dining">Dining</button>
                     <button class="filter-btn" data-type="adventure">Adventure</button>
+                    <button class="filter-btn" data-type="luxury">Luxury</button>
                     <button class="filter-btn" data-type="cultural">Cultural</button>
+                    <button class="filter-btn" data-type="hotel">Hotel</button>
                 </div>
             </div>
             <div class="filter-section">
@@ -216,7 +266,9 @@
         </div>
         <h2 class="section-title">Popular Dating Spots</h2>
         <div class="spots-grid">
+            <!-- Original spots -->
             <div class="spot-card" data-type="outdoor" data-price="0">
+                <span class="category-tag">Outdoor</span>
                 <img src="https://images.unsplash.com/photo-1516426122078-c23e76319801" alt="Diani Beach" class="spot-image">
                 <div class="spot-info">
                     <h3 class="spot-name">Diani Beach</h3>
@@ -228,55 +280,102 @@
                         </div>
                         <div class="price-item">
                             <span class="price-label">Beach Activities</span>
-                            <span class="price-value">KSh 1,000 - 3,000</span>
-                        </div>
-                        <div class="price-item">
-                            <span class="price-label">Beachfront Dinner</span>
-                            <span class="price-value">KSh 3,000 - 5,000</span>
+                            <span class="price-value">KSh 100 - 1,000</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="spot-card" data-type="adventure" data-price="430">
-                <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e" alt="Nairobi National Park" class="spot-image">
+            <div class="spot-card" data-type="luxury" data-price="25000">
+                <span class="category-tag">Luxury</span>
+                <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb" alt="Giraffe Manor" class="spot-image">
                 <div class="spot-info">
-                    <h3 class="spot-name">Nairobi National Park</h3>
-                    <p class="spot-description">Safari experience with city skyline views. Perfect for adventure lovers.</p>
+                    <h3 class="spot-name">Giraffe Manor</h3>
+                    <p class="spot-description">Iconic boutique hotel where you can dine with giraffes. Ultimate luxury romantic experience.</p>
                     <div class="price-details">
                         <div class="price-item">
-                            <span class="price-label">Citizens Entry</span>
-                            <span class="price-value">KSh 430</span>
+                            <span class="price-label">Room Per Night</span>
+                            <span class="price-value">KSh 2,500 - 3,500</span>
                         </div>
                         <div class="price-item">
-                            <span class="price-label">Residents Entry</span>
-                            <span class="price-value">KSh 1,030</span>
+                            <span class="price-label">Breakfast Experience</span>
+                            <span class="price-value">KSh 1,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spot-card" data-type="dining" data-price="5000">
+                <span class="category-tag">Dining</span>
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4" alt="Tamarind Restaurant" class="spot-image">
+                <div class="spot-info">
+                    <h3 class="spot-name">Tamarind Restaurant</h3>
+                    <p class="spot-description">Elegant seafood restaurant with stunning ocean views in Mombasa.</p>
+                    <div class="price-details">
+                        <div class="price-item">
+                            <span class="price-label">Average Main Course</span>
+                            <span class="price-value">KSh 500 - 1,000</span>
                         </div>
                         <div class="price-item">
-                            <span class="price-label">Vehicle Fee</span>
+                            <span class="price-label">Seafood Platter for Two</span>
+                            <span class="price-value">KSh 2,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spot-card" data-type="hotel" data-price="15000">
+                <span class="category-tag">Hotel</span>
+                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945" alt="Hemingways Nairobi" class="spot-image">
+                <div class="spot-info">
+                    <h3 class="spot-name">Hemingways Nairobi</h3>
+                    <p class="spot-description">Luxury boutique hotel with elegant rooms and fine dining restaurant.</p>
+                    <div class="price-details">
+                        <div class="price-item">
+                            <span class="price-label">Room Per Night</span>
+                            <span class="price-value">KSh 100 - 300</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-label">Spa Package</span>
+                            <span class="price-value">KSh 1,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spot-card" data-type="adventure" data-price="8000">
+                <span class="category-tag">Adventure</span>
+                <img src="https://images.unsplash.com/photo-1533692328991-08159ff19fca" alt="Lake Naivasha Resort" class="spot-image">
+                <div class="spot-info">
+                    <h3 class="spot-name">Uhuru Park</h3>
+                    <p class="spot-description">Uhuru Park with boat rides and romantic sunset views.</p>
+                    <div class="price-details">
+                        <div class="price-item">
+                            <span class="price-label">Room Per Night</span>
+                            <span class="price-value">KSh 100 - 1,000</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-label">Boat Ride</span>
+                            <span class="price-value">KSh 500</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spot-card" data-type="cultural" data-price="3000">
+                <span class="category-tag">Cultural</span>
+                <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874" alt="Bomas of Kenya" class="spot-image">
+                <div class="spot-info">
+                    <h3 class="spot-name">Bomas of Kenya</h3>
+                    <p class="spot-description">Experience traditional Kenyan culture and performances.</p>
+                    <div class="price-details">
+                        <div class="price-item">
+                            <span class="price-label">Entry Per Person</span>
                             <span class="price-value">KSh 300</span>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="spot-card" data-type="outdoor" data-price="200">
-                <img src="https://images.unsplash.com/photo-1565361849-4b1cc9e68846" alt="Karura Forest" class="spot-image">
-                <div class="spot-info">
-                    <h3 class="spot-name">Karura Forest</h3>
-                    <p class="spot-description">Peaceful nature trails and waterfalls for a serene date experience.</p>
-                    <div class="price-details">
                         <div class="price-item">
-                            <span class="price-label">Citizens Entry</span>
-                            <span class="price-value">KSh 200</span>
-                        </div>
-                        <div class="price-item">
-                            <span class="price-label">Residents Entry</span>
-                            <span class="price-value">KSh 600</span>
-                        </div>
-                        <div class="price-item">
-                            <span class="price-label">Bike Rental</span>
-                            <span class="price-value">KSh 500/hour</span>
+                            <span class="price-label">Cultural Show</span>
+                            <span class="price-value">Included</span>
                         </div>
                     </div>
                 </div>
@@ -286,29 +385,27 @@
         <h2 class="section-title">Upcoming Events</h2>
         <div class="events-grid">
             <div class="event-card" data-type="dining" data-price="3500">
+                <span class="category-tag">Dining</span>
                 <img src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17" alt="Sunset Dinner" class="event-image">
                 <div class="event-info">
                     <span class="date-badge">15 FEB, 6:00 PM</span>
                     <h3 class="event-name">Sunset Dinner at Carnivore</h3>
-                    <p class="event-description">Enjoy a romantic dinner with live entertainment at the famous Carnivore Restaurant.</p>
+                    <p class="event-description">Romantic dinner with live entertainment at the famous Carnivore Restaurant.</p>
                     <div class="price-details">
                         <div class="price-item">
                             <span class="price-label">Per Person</span>
-                            <span class="price-value">KSh 3,500</span>
+                            <span class="price-value">KSh 1,500</span>
                         </div>
                         <div class="price-item">
                             <span class="price-label">Couple Package</span>
-                            <span class="price-value">KSh 6,500</span>
-                        </div>
-                        <div class="price-item">
-                            <span class="price-label">With Wine Pairing</span>
-                            <span class="price-value">+KSh 2,000</span>
+                            <span class="price-value">KSh 1,500</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="event-card" data-type="cultural" data-price="4000">
+                <span class="category-tag">Cultural</span>
                 <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3" alt="Wine Tasting" class="event-image">
                 <div class="event-info">
                     <span class="date-badge">20 FEB, 5:00 PM</span>
@@ -323,33 +420,6 @@
                             <span class="price-label">Couple Package</span>
                             <span class="price-value">KSh 7,500</span>
                         </div>
-                        <div class="price-item">
-                            <span class="price-label">VIP Experience</span>
-                            <span class="price-value">KSh 12,000</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="event-card" data-type="cultural" data-price="5000">
-                <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d" alt="Cooking Class" class="event-image">
-                <div class="event-info">
-                    <span class="date-badge">25 FEB, 2:00 PM</span>
-                    <h3 class="event-name">Couples Cooking Class</h3>
-                    <p class="event-description">Learn to prepare a gourmet three-course meal together at Cookery Place.</p>
-                    <div class="price-details">
-                        <div class="price-item">
-                            <span class="price-label">Per Couple</span>
-                            <span class="price-value">KSh 5,000</span>
-                        </div>
-                        <div class="price-item">
-                            <span class="price-label">With Wine</span>
-                            <span class="price-value">KSh 6,500</span>
-                        </div>
-                        <div class="price-item">
-                            <span class="price-label">Premium Package</span>
-                            <span class="price-value">KSh 8,000</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -358,11 +428,11 @@
 
     <script>
         const filterButtons = document.querySelectorAll('.filter-btn[data-type]');
-        const cards = document.querySelectorAll('.spot-card, .event-card');
         let currentType = 'all';
         let currentMinPrice = 0;
         let currentMaxPrice = Infinity;
 
+        // Setup filter button clicks
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
                 filterButtons.forEach(btn => btn.classList.remove('active'));
@@ -372,48 +442,92 @@
             });
         });
 
-        function applyPriceFilter() {
+        function extractPrice(priceString) {
+            if (!priceString) return 0;
+            if (priceString.toLowerCase() === 'free' || priceString.toLowerCase() === 'included') return 0;
+            
+            // Remove 'KSh' and any commas, then extract numbers
+            const cleaned = priceString.replace(/KSh|,/g, '');
+            const matches = cleaned.match(/\d+/g);
+            
+            if (!matches) return 0;
+            
+            // If there's a range, take the lower number
+            return Math.min(...matches.map(num => parseInt(num)));
+        }
+
+        function getLowestPrice(card) {
+            const priceElements = card.querySelectorAll('.price-value');
+            let lowestPrice = Infinity;
+
+            priceElements.forEach(element => {
+                const price = extractPrice(element.textContent);
+                if (price < lowestPrice) lowestPrice = price;
+            });
+
+            return lowestPrice === Infinity ? 0 : lowestPrice;
+        }
+
+        function applyFilters() {
             const minPrice = document.getElementById('min-price').value;
             const maxPrice = document.getElementById('max-price').value;
             
             currentMinPrice = minPrice ? parseInt(minPrice) : 0;
             currentMaxPrice = maxPrice ? parseInt(maxPrice) : Infinity;
-            
-            applyFilters();
-        }
 
-        function applyFilters() {
-            let visibleCards = 0;
+            const cards = document.querySelectorAll('.spot-card, .event-card');
+            let visibleSpots = 0;
+            let visibleEvents = 0;
 
             cards.forEach(card => {
                 const type = card.dataset.type;
-                const price = parseInt(card.dataset.price);
-                
+                const price = getLowestPrice(card);
+                const isSpot = card.classList.contains('spot-card');
+
                 const typeMatch = currentType === 'all' || type === currentType;
-                const priceMatch = price >= currentMinPrice && price <= currentMaxPrice;
+                const priceMatch = price >= currentMinPrice && 
+                                 (currentMaxPrice === Infinity || price <= currentMaxPrice);
 
                 if (typeMatch && priceMatch) {
                     card.classList.remove('hidden');
-                    visibleCards++;
+                    if (isSpot) visibleSpots++;
+                    else visibleEvents++;
                 } else {
                     card.classList.add('hidden');
                 }
             });
 
+            updateNoResultsMessages(visibleSpots, visibleEvents);
+        }
+
+        function updateNoResultsMessages(visibleSpots, visibleEvents) {
             const spotsGrid = document.querySelector('.spots-grid');
             const eventsGrid = document.querySelector('.events-grid');
             
+            // Remove existing messages
             document.querySelectorAll('.no-results').forEach(msg => msg.remove());
 
-            if (visibleCards === 0) {
-                const noResults = document.createElement('div');
-                noResults.className = 'no-results';
-                noResults.textContent = 'No results found for the selected filters.';
-                spotsGrid.appendChild(noResults.cloneNode(true));
-                eventsGrid.appendChild(noResults.cloneNode(true));
+            // Add messages if needed
+            if (visibleSpots === 0) {
+                const message = document.createElement('div');
+                message.className = 'no-results';
+                message.textContent = 'No spots found for the selected filters.';
+                spotsGrid.appendChild(message);
+            }
+
+            if (visibleEvents === 0) {
+                const message = document.createElement('div');
+                message.className = 'no-results';
+                message.textContent = 'No events found for the selected filters.';
+                eventsGrid.appendChild(message);
             }
         }
 
+        // Add input event listeners for real-time filtering
+        document.getElementById('min-price').addEventListener('input', applyFilters);
+        document.getElementById('max-price').addEventListener('input', applyFilters);
+
+        // Initial filter application
         applyFilters();
     </script>
 </body>
