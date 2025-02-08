@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Romance Movies Display</title>
+    <style>
+        :root {
+            --light-pink: #FFE4E1;
+            --purple: #D8A7B1;
+            --bright-pink: #FF69B4;
+            --dusty-pink: #E8B4B8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-pink);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--purple);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .filters {
+            margin-bottom: 30px;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        #searchInput {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 20px;
+            border: 2px solid var(--purple);
+            border-radius: 25px;
+            font-size: 16px;
+            display: block;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            box-shadow: 0 0 5px var(--bright-pink);
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            background-color: white;
+            color: var(--purple);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            border: 2px solid var(--purple);
+        }
+
+        .filter-btn:hover {
+            background-color: var(--purple);
+            color: white;
+        }
+
+        .filter-btn.active {
+            background-color: var(--purple);
+            color: white;
+        }
+
+        .movie-card.hidden {
+            display: none;
+        }
+
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+        }
+
+        .popup-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--light-pink);
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 1001;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup-image {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .close-popup {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--purple);
+            transition: color 0.3s ease;
+        }
+
+        .close-popup:hover {
+            color: var(--bright-pink);
+        }
+
+        .popup-title {
+            color: var(--purple);
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .popup-section {
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .popup-section h3 {
+            color: var(--bright-pink);
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .popup-section p {
+            color: var(--purple);
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+
+        .cast-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .cast-member {
+            background: var(--purple);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            transition: transform 0.3s ease;
+        }
+
+        .cast-member:hover {
+            transform: translateY(-2px);
+        }
+
+        .watch-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .watch-link {
+            background: var(--bright-pink);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .watch-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 20px 0;
+        }
+
+        .movie-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .movie-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .movie-card:hover .movie-image {
+            transform: scale(1.05);
+        }
+
+        .movie-info {
+            padding: 20px;
+        }
+
+        .movie-title {
+            color: var(--purple);
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .movie-description {
+            color: var(--dusty-pink);
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+            }
+
+            .movie-image {
+                height: 350px;
+            }
+
+            .popup-content {
+                width: 95%;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Romance & Relationship Movies</h1>
+            <p>Discover stories of love, passion, and connection</p>
+        </div>
+
+        <div class="filters">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search movies...">
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-category="all">All</button>
+                <button class="filter-btn" data-category="classic">Classic Romance</button>
+                <button class="filter-btn" data-category="modern">Modern Romance</button>
+                <button class="filter-btn" data-category="drama">Drama</button>
+            </div>
+        </div>
+
+        <div class="movies-grid">
+            <div class="movie-card" onclick="openPopup(1)">
+                <img src="./assets/Screenshot 2025-02-08 at 03.06.10.png" alt="The Notebook" class="movie-image">
+                <div class="movie-info">
+                    <h3 class="movie-title">The Notebook</h3>
+                    <p class="movie-description">A tale of enduring love that spans decades, from passionate youth to lasting commitment.</p>
+                </div>
+            </div>
+
+            <div class="movie-card" onclick="openPopup(2)">
+                <img src="./assets/Screenshot 2025-02-08 at 03.06.55.png" alt="Eternal Sunshine" class="movie-image">
+                <div class="movie-info">
+                    <h3 class="movie-title">Eternal Sunshine of the Spotless Mind</h3>
+                    <p class="movie-description">A couple undergoes a procedure to erase each other from their memories.</p>
+                </div>
+            </div>
+
+            <div class="movie-card" onclick="openPopup(3)">
+                <img src="./assets/Screenshot 2025-02-08 at 03.07.34.png" alt="La La Land" class="movie-image">
+                <div class="movie-info">
+                    <h3 class="movie-title">La La Land</h3>
+                    <p class="movie-description">An aspiring actress and a jazz musician pursue their dreams while falling in love.</p>
+                </div>
+            </div>
+
+            <div class="movie-card" onclick="openPopup(4)">
+                <img src="./assets/Screenshot 2025-02-08 at 03.08.03.png" alt="Pride and Prejudice" class="movie-image">
+                <div class="movie-info">
+                    <h3 class="movie-title">Pride and Prejudice</h3>
+                    <p class="movie-description">Elizabeth Bennet's journey of love and self-discovery in 19th century England.</p>
+                </div>
+            </div>
+
+            <div class="movie-card" onclick="openPopup(5)">
+                <img src="./assets/Screenshot 2025-02-08 at 03.08.43.png" alt="500 Days of Summer" class="movie-image">
+                <div class="movie-info">
+                    <h3 class="movie-title">500 Days of Summer</h3>
+                    <p class="movie-description">A non-linear look at the rise and fall of a modern relationship.</p>
+                </div>
+            </div>
+
+            <div class="movie-card" onclick="openPopup(6)">
+                <img src="./assets/Screenshot 2025-02-08 at 03.09.10.png" alt="About Time" class="movie-image">
+                <div class="movie-info">
+                    <h3 class="movie-title">About Time</h3>
+                    <p class="movie-description">A young man uses time travel to find love and understand life's precious moments.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Template -->
+    <div id="popup" class="popup-overlay">
+        <div class="popup-content">
+            <span class="close-popup" onclick="closePopup()">&times;</span>
+            <h2 class="popup-title" id="popup-title"></h2>
+            <img id="popup-image" class="popup-image" src="" alt="">
+
+            <div class="popup-section">
+                <h3>Synopsis</h3>
+                <p id="popup-synopsis"></p>
+            </div>
+
+            <div class="popup-section">
+                <h3>Cast</h3>
+                <div class="cast-list" id="popup-cast"></div>
+            </div>
+
+            <div class="popup-section">
+                <h3>Where to Watch</h3>
+                <div class="watch-links" id="popup-watch-links"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const movieData = {
+            1: {
+                title: "The Notebook",
+                image: "./assets/Screenshot 2025-02-08 at 03.06.10.png",
+                synopsis: "In 1940s South Carolina, mill worker Noah Calhoun and rich girl Allie fall deeply in love. Though they're separated by their social differences, their passion remains unquenched through the years, even as Allie is engaged to another man. Their story is read from a notebook in the present day by an elderly man to a fellow nursing home resident.",
+                cast: ["Ryan Gosling", "Rachel McAdams", "James Garner", "Gena Rowlands", "James Marsden"],
+                watchLinks: [
+                    { platform: "Netflix", url: "#" },
+                    { platform: "Amazon Prime", url: "#" },
+                    { platform: "HBO Max", url: "#" }
+                ],
+                categories: ["classic", "drama"]
+            },
+            2: {
+                title: "Eternal Sunshine of the Spotless Mind",
+                image: "./assets/Screenshot 2025-02-08 at 03.06.55.png",
+                synopsis: "After a painful breakup, Joel Barish discovers that his ex-girlfriend Clementine has undergone a medical procedure to erase him from her memory. Heartbroken, he decides to do the same. As his memories begin to fade, he realizes that some things are worth holding onto, even if they hurt.",
+                cast: ["Jim Carrey", "Kate Winslet", "Kirsten Dunst", "Mark Ruffalo", "Elijah Wood"],
+                watchLinks: [
+                    { platform: "Netflix", url: "#" },
+                    { platform: "Amazon Prime", url: "#" }
+                ],
+                categories: ["modern", "drama"]
+            },
+            3: {
+                title: "La La Land",
+                image: "./assets/Screenshot 2025-02-08 at 03.07.34.png",
+                synopsis: "In Los Angeles, aspiring actress Mia and dedicated jazz musician Sebastian fall in love while pursuing their dreams. As success mounts, they are faced with decisions that begin to fray the fragile fabric of their love affair, testing their relationship.",
+                cast: ["Emma Stone", "Ryan Gosling", "John Legend", "Rosemarie DeWitt", "J.K. Simmons"],
+                watchLinks: [
+                    { platform: "Netflix", url: "#" },
+                    { platform: "Amazon Prime", url: "#" },
+                    { platform: "Hulu", url: "#" }
+                ],
+                categories: ["modern", "drama"]
+            },
+            4: {
+                title: "Pride and Prejudice",
+                image: "./assets/Screenshot 2025-02-08 at 03.08.03.png",
+                synopsis: "In this adaptation of Jane Austen's beloved novel, Elizabeth Bennet lives with her family in the English countryside. When wealthy Mr. Darcy arrives in their neighborhood, her prejudice and his pride must be overcome if they are to look past their first impressions.",
+                cast: ["Keira Knightley", "Matthew Macfadyen", "Rosamund Pike", "Donald Sutherland", "Judi Dench"],
+                watchLinks: [
+                    { platform: "HBO Max", url: "#" },
+                    { platform: "Amazon Prime", url: "#" }
+                ],
+                categories: ["classic"]
+            },
+            5: {
+                title: "500 Days of Summer",
+                image: "./assets/Screenshot 2025-02-08 at 03.08.43.png",
+                synopsis: "An offbeat romantic comedy that tracks the relationship between Tom and Summer over the course of 500 days. Tom, a hopeless romantic, finally meets Summer, who doesn't believe in true love. Their relationship is told out of order, showing the complexities of modern love.",
+                cast: ["Joseph Gordon-Levitt", "Zooey Deschanel", "Geoffrey Arend", "Chloë Grace Moretz", "Matthew Gray Gubler"],
+                watchLinks: [
+                    { platform: "Hulu", url: "#" },
+                    { platform: "Amazon Prime", url: "#" }
+                ],
+                categories: ["modern"]
+            },
+            6: {
+                title: "About Time",
+                image: "./assets/Screenshot 2025-02-08 at 03.09.10.png",
+                synopsis: "At the age of 21, Tim discovers he can travel in time. He uses his ability to find true love with Mary, but learns that his power can't solve all his problems and may even create new ones. A heartwarming story about family, love, and making the most of everyday life.",
+                cast: ["Domhnall Gleeson", "Rachel McAdams", "Bill Nighy", "Lydia Wilson", "Lindsay Duncan"],
+                watchLinks: [
+                    { platform: "Netflix", url: "#" },
+                    { platform: "Amazon Prime", url: "#" }
+                ],
+                categories: ["modern"]
+            }
+        };
+
+        function openPopup(movieId) {
+            const movie = movieData[movieId];
+            if (!movie) return;
+
+            document.getElementById('popup-title').textContent = movie.title;
+            document.getElementById('popup-image').src = movie.image;
+            document.getElementById('popup-image').alt = movie.title;
+            document.getElementById('popup-synopsis').textContent = movie.synopsis;
+
+            const castContainer = document.getElementById('popup-cast');
+            castContainer.innerHTML = movie.cast
+                .map(actor => `<span class="cast-member">${actor}</span>`)
+                .join('');
+
+            const linksContainer = document.getElementById('popup-watch-links');
+            linksContainer.innerHTML = movie.watchLinks
+                .map(link => `<a href="${link.url}" class="watch-link">${link.platform}</a>`)
+                .join('');
+
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        // Filtering functionality
+        const searchInput = document.getElementById('searchInput');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const movieCards = document.querySelectorAll('.movie-card');
+
+        function filterMovies() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeCategory = document.querySelector('.filter-btn.active').dataset.category;
+
+            movieCards.forEach((card, index) => {
+                const movieId = index + 1;
+                const movie = movieData[movieId];
+                const title = movie.title.toLowerCase();
+                const synopsis = movie.synopsis.toLowerCase();
+                
+                const matchesSearch = title.includes(searchTerm) || synopsis.includes(searchTerm);
+                const matchesCategory = activeCategory === 'all' || movie.categories.includes(activeCategory);
+
+                if (matchesSearch && matchesCategory) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', filterMovies);
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                filterMovies();
+            });
+        });
+
+        // Close popup when clicking outside
+        document.getElementById('popup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePopup();
+            }
+        });
+    </script>
+</body>
+</html>
