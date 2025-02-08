@@ -5,23 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Romance Movies Display</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
         :root {
-            --light-pink: #FFE4E1;
-            --purple: #D8A7B1;
-            --bright-pink: #FF69B4;
-            --dusty-pink: #E8B4B8;
+            --primary-bg: #f8e1e8;
+            --secondary-bg: #e6d5e8;
+            --accent-color: #b784c1;
+            --text-primary: #4a2b50;
+            --text-secondary: #7d5986;
+            --hover-color: #d4a5dd;
+            --card-bg: #fff1f5;
+            --shadow-color: rgba(183, 132, 193, 0.2);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
-            background-color: var(--light-pink);
+            background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
             padding: 20px;
+            padding-top: 100px;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: rgba(183, 132, 193, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px var(--shadow-color);
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 95%;
+            max-width: 1400px;
+            z-index: 1000;
+            margin-bottom: 40px;
+        }
+
+        .navbar ul {
+            display: flex;
+            list-style: none;
+            gap: 10px;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .navbar li {
+            margin: 0;
+            flex: 1;
+            text-align: center;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: var(--text-primary);
+            padding: 12px 15px;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+            display: block;
+            white-space: nowrap;
+        }
+
+        .navbar a:hover {
+            background: var(--hover-color);
+            border-radius: 10px;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .navbar .active {
+            background: var(--accent-color);
+            color: white;
+            border-radius: 10px;
         }
 
         .container {
@@ -32,7 +100,7 @@
         .header {
             text-align: center;
             margin-bottom: 30px;
-            color: var(--purple);
+            color: var(--text-primary);
         }
 
         .header h1 {
@@ -40,29 +108,36 @@
             margin-bottom: 10px;
         }
 
-        .filters {
-            margin-bottom: 30px;
+        .header p {
+            color: var(--text-secondary);
         }
 
-        .search-container {
-            margin-bottom: 20px;
+        /* Search and Filters */
+        .filters {
+            margin-bottom: 30px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px var(--shadow-color);
         }
 
         #searchInput {
             width: 100%;
             max-width: 400px;
             padding: 12px 20px;
-            border: 2px solid var(--purple);
+            border: 2px solid var(--accent-color);
             border-radius: 25px;
             font-size: 16px;
             display: block;
             margin: 0 auto;
             transition: all 0.3s ease;
+            background: white;
+            color: var(--text-primary);
         }
 
         #searchInput:focus {
             outline: none;
-            box-shadow: 0 0 5px var(--bright-pink);
+            box-shadow: 0 0 10px var(--shadow-color);
         }
 
         .filter-buttons {
@@ -70,153 +145,33 @@
             justify-content: center;
             gap: 15px;
             flex-wrap: wrap;
+            margin-top: 20px;
         }
 
         .filter-btn {
             padding: 10px 20px;
-            border: none;
+            border: 2px solid var(--accent-color);
             border-radius: 20px;
-            background-color: white;
-            color: var(--purple);
+            background: white;
+            color: var(--accent-color);
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 14px;
-            border: 2px solid var(--purple);
+            font-weight: 500;
         }
 
         .filter-btn:hover {
-            background-color: var(--purple);
+            background: var(--hover-color);
             color: white;
+            transform: translateY(-2px);
         }
 
         .filter-btn.active {
-            background-color: var(--purple);
+            background: var(--accent-color);
             color: white;
         }
 
-        .movie-card.hidden {
-            display: none;
-        }
-
-        .popup-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-        }
-
-        .popup-content {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: var(--light-pink);
-            padding: 20px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            z-index: 1001;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .popup-image {
-            width: 100%;
-            max-width: 300px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .close-popup {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--purple);
-            transition: color 0.3s ease;
-        }
-
-        .close-popup:hover {
-            color: var(--bright-pink);
-        }
-
-        .popup-title {
-            color: var(--purple);
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .popup-section {
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.5);
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .popup-section h3 {
-            color: var(--bright-pink);
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-
-        .popup-section p {
-            color: var(--purple);
-            line-height: 1.6;
-            font-size: 1.1em;
-        }
-
-        .cast-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .cast-member {
-            background: var(--purple);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            transition: transform 0.3s ease;
-        }
-
-        .cast-member:hover {
-            transform: translateY(-2px);
-        }
-
-        .watch-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: center;
-        }
-
-        .watch-link {
-            background: var(--bright-pink);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 25px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-weight: bold;
-        }
-
-        .watch-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
+        /* Movie Cards */
         .movies-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -225,17 +180,17 @@
         }
 
         .movie-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px var(--shadow-color);
             transition: transform 0.3s ease;
             cursor: pointer;
         }
 
         .movie-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 15px var(--shadow-color);
         }
 
         .movie-image {
@@ -254,20 +209,167 @@
         }
 
         .movie-title {
-            color: var(--purple);
+            color: var(--text-primary);
             margin-bottom: 10px;
             font-size: 1.2em;
         }
 
         .movie-description {
-            color: var(--dusty-pink);
+            color: var(--text-secondary);
             font-size: 0.9em;
             line-height: 1.5;
         }
 
+        /* Popup Styles */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+        }
+
+        .popup-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 1001;
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .popup-image {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 10px;
+            margin: 0 auto 20px;
+            display: block;
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        .close-popup {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+        }
+
+        .close-popup:hover {
+            color: var(--accent-color);
+        }
+
+        .popup-title {
+            color: var(--text-primary);
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .popup-section {
+            margin-bottom: 20px;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px var(--shadow-color);
+        }
+
+        .popup-section h3 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .popup-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+
+        .cast-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .cast-member {
+            background: var(--accent-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            transition: transform 0.3s ease;
+        }
+
+        .cast-member:hover {
+            transform: translateY(-2px);
+            background: var(--hover-color);
+        }
+
+        .watch-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .watch-link {
+            background: var(--accent-color);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .watch-link:hover {
+            background: var(--hover-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
         @media (max-width: 768px) {
+            .navbar {
+                width: 100%;
+                border-radius: 0;
+                top: 0;
+                padding: 10px;
+            }
+
+            .navbar ul {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .navbar li {
+                flex: 0 0 auto;
+                width: calc(33.33% - 5px);
+            }
+
+            .navbar a {
+                font-size: 0.8em;
+                padding: 8px 10px;
+            }
+
+            body {
+                padding-top: 120px;
+            }
+
             .movies-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                grid-template-columns: 1fr;
                 gap: 20px;
             }
 
@@ -279,10 +381,31 @@
                 width: 95%;
                 padding: 15px;
             }
+
+            .filter-buttons {
+                flex-direction: column;
+            }
+
+            .filter-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
+    <header>
+        <nav class="navbar">
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../chatbot/chatbot.html">Chatbot</a></li>
+                <li><a href="../music/music.html">Music</a></li>
+                <li><a href="../movies/movie.html" class="active">Movies</a></li>
+                <li><a href="../spots/spots.html">Dating Spots</a></li>
+                <li><a href="../about.html">About & Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
     <div class="container">
         <div class="header">
             <h1>Romance & Relationship Movies</h1>
