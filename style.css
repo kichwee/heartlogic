@@ -1,22 +1,27 @@
 /* Reset default styles */
-body, ul {
+* {
     margin: 0;
     padding: 0;
-    list-style: none;
+    box-sizing: border-box;
 }
 
 body {
     background: linear-gradient(135deg, #8F788D, #D180AC);
     font-family: 'Arial', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Container for all content */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 /* Navbar Styling */
 .navbar {
-    background: rgba(255, 255, 255, 0.2); /* Glass effect */
+    background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     display: flex;
@@ -31,14 +36,13 @@ body {
     transform: translateX(-50%);
     width: 85%;
     max-width: 900px;
+    z-index: 1000;
 }
 
-/* Navbar List Items */
 .navbar li {
     margin: 0 20px;
 }
 
-/* Navbar Links */
 .navbar a {
     text-decoration: none;
     color: white;
@@ -47,10 +51,8 @@ body {
     font-weight: bold;
     transition: all 0.3s ease-in-out;
     display: inline-block;
-    position: relative;
 }
 
-/* Hover Effect - Glow & 3D */
 .navbar a:hover {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
@@ -58,18 +60,157 @@ body {
     transform: scale(1.1);
 }
 
-/* Active Page Indicator */
 .navbar .active {
-    font-weight: bold;
     border-bottom: 3px solid white;
 }
 
-/* 3D Press Effect */
-.navbar a:active {
-    transform: scale(0.9);
+/* Main Content Styling */
+.content {
+    padding-top: 120px; /* Account for fixed navbar */
+    padding-bottom: 80px; /* Account for footer */
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-/* Media Queries for Mobile */
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+    margin-bottom: 40px;
+}
+
+.hero h1 {
+    font-size: 3.5em;
+    color: white;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.tagline {
+    font-size: 1.5em;
+    color: white;
+    opacity: 0.9;
+}
+
+/* Features Section */
+.features {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 30px;
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    padding: 30px;
+    border-radius: 20px;
+    flex: 1;
+    min-width: 280px;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.feature-card i {
+    font-size: 2.5em;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.feature-card h2 {
+    color: white;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+.feature-card p {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+}
+
+/* CTA Section */
+.cta {
+    text-align: center;
+    padding: 60px 20px;
+    margin: 40px auto;
+    max-width: 800px;
+}
+
+.cta h2 {
+    color: white;
+    font-size: 2em;
+    margin-bottom: 30px;
+}
+
+.start-button {
+    background: white;
+    color: #D180AC;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.2em;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.start-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.4);
+}
+
+/* Footer */
+footer {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.social-links {
+    display: flex;
+    gap: 20px;
+}
+
+.social-links a {
+    color: white;
+    font-size: 1.2em;
+    transition: opacity 0.3s ease;
+}
+
+.social-links a:hover {
+    opacity: 0.7;
+}
+
+/* Media Queries */
+@media (max-width: 968px) {
+    .features {
+        flex-wrap: wrap;
+    }
+
+    .feature-card {
+        flex: 0 0 calc(50% - 15px);
+    }
+}
+
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;
@@ -79,5 +220,29 @@ body {
 
     .navbar li {
         margin: 10px 0;
+    }
+
+    .hero h1 {
+        font-size: 2.5em;
+    }
+
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .feature-card {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .social-links {
+        justify-content: center;
     }
 }
